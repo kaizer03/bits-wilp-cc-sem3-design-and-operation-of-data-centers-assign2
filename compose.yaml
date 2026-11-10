@@ -1,0 +1,95 @@
+name: dodc-ospf-lab
+
+x-router: &router
+  image: quay.io/frrouting/frr:10.5.5
+  cap_add: [NET_ADMIN, SYS_ADMIN]
+  entrypoint: ["/sbin/tini", "--", "/bin/sh", "-ec", "ip route del default 2>/dev/null || true; exec /usr/lib/frr/docker-start"]
+  sysctls:
+    net.ipv4.ip_forward: "1"
+    net.ipv4.conf.all.rp_filter: "0"
+    net.ipv4.conf.default.rp_filter: "0"
+
+x-segment: &segment
+  driver: bridge
+  driver_opts:
+    com.docker.network.bridge.enable_ip_masquerade: "false"
+
+x-host: &host
+  build: .
+  image: dodc-ospf-host:1
+  cap_add: [NET_ADMIN]
+  entrypoint: ["/bin/sh", "-ec", "ip route replace default via \"$$GATEWAY\"; exec sleep infinity"]
+
+services:
+  leaf1:
+    <<: *router
+    hostname: leaf1
+    volumes:
+      - ./frr/daemons:/etc/frr/daemons:ro
+      - ./frr/vtysh.conf:/etc/frr/vtysh.conf:ro
+      - ./frr/leaf1.conf:/etc/frr/frr.conf:ro
+    networks:
+      access1: {ipv4_address: 10.76.101.2, interface_name: edge}
+      l1s1: {ipv4_address: 10.76.0.2, interface_name: to_s1}
+      l1s2: {ipv4_address: 10.76.0.10, interface_name: to_s2}
+  leaf2:
+    <<: *router
+    hostname: leaf2
+    volumes:
+      - ./frr/daemons:/etc/frr/daemons:ro
+      - ./frr/vtysh.conf:/etc/frr/vtysh.conf:ro
+      - ./frr/leaf2.conf:/etc/frr/frr.conf:ro
+    networks:
+      access2: {ipv4_address: 10.76.102.2, interface_name: edge}
+      l2s1: {ipv4_address: 10.76.0.18, interface_name: to_s1}
+      l2s2: {ipv4_address: 10.76.0.26, interface_name: to_s2}
+  spine1:
+    <<: *router
+    hostname: spine1
+    volumes:
+      - ./frr/daemons:/etc/frr/daemons:ro
+      - ./frr/vtysh.conf:/etc/frr/vtysh.conf:ro
+      - ./frr/spine1.conf:/etc/frr/frr.conf:ro
+    networks:
+      l1s1: {ipv4_address: 10.76.0.3, interface_name: to_l1}
+      l2s1: {ipv4_address: 10.76.0.19, interface_name: to_l2}
+  spine2:
+    <<: *router
+    hostname: spine2
+    volumes:
+      - ./frr/daemons:/etc/frr/daemons:ro
+      - ./frr/vtysh.conf:/etc/frr/vtysh.conf:ro
+      - ./frr/spine2.conf:/etc/frr/frr.conf:ro
+    networks:
+      l1s2: {ipv4_address: 10.76.0.11, interface_name: to_l1}
+      l2s2: {ipv4_address: 10.76.0.27, interface_name: to_l2}
+  host1:
+    <<: *host
+    environment: {GATEWAY: 10.76.101.2}
+    networks:
+      access1: {ipv4_address: 10.76.101.10, interface_name: eth0}
+  host2:
+    <<: *host
+    environment: {GATEWAY: 10.76.102.2}
+    networks:
+      access2: {ipv4_address: 10.76.102.10, interface_name: eth0}
+
+networks:
+  l1s1:
+    <<: *segment
+    ipam: {config: [{subnet: 10.76.0.0/29}]}
+  l1s2:
+    <<: *segment
+    ipam: {config: [{subnet: 10.76.0.8/29}]}
+  l2s1:
+    <<: *segment
+    ipam: {config: [{subnet: 10.76.0.16/29}]}
+  l2s2:
+    <<: *segment
+    ipam: {config: [{subnet: 10.76.0.24/29}]}
+  access1:
+    <<: *segment
+    ipam: {config: [{subnet: 10.76.101.0/24}]}
+  access2:
+    <<: *segment
+    ipam: {config: [{subnet: 10.76.102.0/24}]}

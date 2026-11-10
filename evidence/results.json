@@ -1,0 +1,66 @@
+{
+  "recorded_at": "2026-11-10T12:24:25.366237+00:00",
+  "docker": "29.9.2 (arm64)",
+  "compose": "5.6.1",
+  "frr": "FRRouting 10.5.5_git (leaf1) on Linux(7.0.14-linuxkit).",
+  "kernel": "7.0.14-linuxkit",
+  "frr_image": "quay.io/frrouting/frr@sha256:c3ec7d2241dc9d97f6c4c69719df107b0b103b24009dc8fdb9cfbe5bc9127a60",
+  "source": "10.76.101.10",
+  "destination": "10.76.102.10",
+  "interval_ms": 200.0,
+  "baseline_sent": 10,
+  "baseline_received": 10,
+  "trials": [
+    {
+      "trial": 1,
+      "failed_uplink": "to_s1",
+      "sent": 42,
+      "received": 42,
+      "missing_sequences": [],
+      "longest_reply_gap_ms": 209.2,
+      "down_command_return_ms": 142.5,
+      "one_path_observed_ms": {
+        "leaf1": 240.9,
+        "leaf2": 333.4
+      },
+      "two_paths_restored_ms": {
+        "leaf1": 218.5,
+        "leaf2": 6035.0
+      }
+    },
+    {
+      "trial": 2,
+      "failed_uplink": "to_s1",
+      "sent": 42,
+      "received": 42,
+      "missing_sequences": [],
+      "longest_reply_gap_ms": 215.2,
+      "down_command_return_ms": 116.4,
+      "one_path_observed_ms": {
+        "leaf1": 207.6,
+        "leaf2": 315.7
+      },
+      "two_paths_restored_ms": {
+        "leaf1": 196.3,
+        "leaf2": 5488.6
+      }
+    },
+    {
+      "trial": 3,
+      "failed_uplink": "to_s1",
+      "sent": 42,
+      "received": 42,
+      "missing_sequences": [],
+      "longest_reply_gap_ms": 209.3,
+      "down_command_return_ms": 122.4,
+      "one_path_observed_ms": {
+        "leaf1": 216.9,
+        "leaf2": 309.7
+      },
+      "two_paths_restored_ms": {
+        "leaf1": 220.3,
+        "leaf2": 5752.3
+      }
+    }
+  ]
+}
