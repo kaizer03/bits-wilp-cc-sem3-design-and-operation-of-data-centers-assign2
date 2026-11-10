@@ -1,57 +1,57 @@
 Baseline: both paths available
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    39.188s            3.971s 10.76.0.3       to_s1:10.76.0.2                      1     0     0
-4.4.4.4           1 Full/DROther    39.188s            3.407s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+4.4.4.4           1 Full/DROther    5m34s              3.111s 10.76.0.11      to_s2:10.76.0.10                     0     0     0
+3.3.3.3           1 Full/DROther    33.390s            3.433s 10.76.0.3       to_s1:10.76.0.2                      0     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:29 ago
+  Last update 00:00:34 ago
   Flags: Selected 
   Status: Installed 
   * 10.76.0.3, via to_s1, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 proto ospf metric 20 
+10.76.102.0/24 nhid 20 proto ospf metric 20 
 	nexthop via 10.76.0.3 dev to_s1 weight 1 
 	nexthop via 10.76.0.11 dev to_s2 weight 1
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    39.161s            3.623s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
-4.4.4.4           1 Full/DROther    34.162s            3.059s 10.76.0.27      to_s2:10.76.0.26                     1     0     0
+3.3.3.3           1 Full/DROther    5m29s              3.134s 10.76.0.19      to_s1:10.76.0.18                     0     0     0
+4.4.4.4           1 Full/DROther    5m34s              3.812s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:34 ago
+  Last update 00:00:29 ago
   Flags: Selected 
   Status: Installed 
   * 10.76.0.19, via to_s1, weight 1
   * 10.76.0.27, via to_s2, weight 1
 $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
-10.76.101.0/24 nhid 18 proto ospf metric 20 
+10.76.101.0/24 nhid 19 proto ospf metric 20 
 	nexthop via 10.76.0.27 dev to_s2 weight 1 
 	nexthop via 10.76.0.19 dev to_s1 weight 1
 
 Trial 1: leaf1 to_s1 down
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-4.4.4.4           1 Full/DROther    43.399s            3.199s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+4.4.4.4           1 Full/DROther    5m38s              3.027s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:00 ago
+  Last update 00:00:01 ago
   Flags: Selected 
   Status: Installed 
     10.76.0.3, via to_s1 inactive, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 via 10.76.0.11 dev to_s2 proto ospf metric 20
+10.76.102.0/24 nhid 20 via 10.76.0.11 dev to_s2 proto ospf metric 20
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    43.354s            3.434s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
-4.4.4.4           1 Full/DROther    38.354s            3.869s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
+3.3.3.3           1 Full/DROther    5m33s              3.031s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
+4.4.4.4           1 Full/DROther    5m38s              3.709s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -65,25 +65,25 @@ $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
 Trial 1: both paths restored
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-4.4.4.4           1 Full/DROther    56.603s            2.999s 10.76.0.11      to_s2:10.76.0.10                     0     0     0
-3.3.3.3           1 Full/DROther    5.436s             3.564s 10.76.0.3       to_s1:10.76.0.2                      1     0     0
+4.4.4.4           1 Full/DROther    5m50s              3.309s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+3.3.3.3           1 Full/DROther    5.366s             3.633s 10.76.0.3       to_s1:10.76.0.2                      1     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:06 ago
+  Last update 00:00:05 ago
   Flags: Selected 
   Status: Installed 
   * 10.76.0.3, via to_s1, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 proto ospf metric 20 
+10.76.102.0/24 nhid 20 proto ospf metric 20 
 	nexthop via 10.76.0.3 dev to_s1 weight 1 
 	nexthop via 10.76.0.11 dev to_s2 weight 1
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    56.558s            3.234s 10.76.0.19      to_s1:10.76.0.18                     0     0     0
-4.4.4.4           1 Full/DROther    51.559s            3.670s 10.76.0.27      to_s2:10.76.0.26                     1     0     0
+3.3.3.3           1 Full/DROther    5m46s              3.341s 10.76.0.19      to_s1:10.76.0.18                     0     0     0
+4.4.4.4           1 Full/DROther    5m51s              3.017s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -93,29 +93,29 @@ Routing entry for 10.76.101.0/24
   * 10.76.0.19, via to_s1, weight 1
   * 10.76.0.27, via to_s2, weight 1
 $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
-10.76.101.0/24 nhid 18 proto ospf metric 20 
+10.76.101.0/24 nhid 19 proto ospf metric 20 
 	nexthop via 10.76.0.27 dev to_s2 weight 1 
 	nexthop via 10.76.0.19 dev to_s1 weight 1
 
 Trial 2: leaf1 to_s1 down
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-4.4.4.4           1 Full/DROther    58.793s            3.810s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+4.4.4.4           1 Full/DROther    5m52s              3.174s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:01 ago
+  Last update 00:00:00 ago
   Flags: Selected 
   Status: Installed 
     10.76.0.3, via to_s1 inactive, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 via 10.76.0.11 dev to_s2 proto ospf metric 20
+10.76.102.0/24 nhid 20 via 10.76.0.11 dev to_s2 proto ospf metric 20
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    58.721s            3.072s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
-4.4.4.4           1 Full/DROther    53.721s            3.507s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
+3.3.3.3           1 Full/DROther    5m48s              3.199s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
+4.4.4.4           1 Full/DROther    5m53s              3.876s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -129,8 +129,8 @@ $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
 Trial 2: both paths restored
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-4.4.4.4           1 Full/DROther    1m11s              3.146s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
-3.3.3.3           1 Full/DROther    5.282s             3.718s 10.76.0.3       to_s1:10.76.0.2                      1     0     0
+4.4.4.4           1 Full/DROther    6m05s              3.560s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+3.3.3.3           1 Full/DROther    5.121s             3.878s 10.76.0.3       to_s1:10.76.0.2                      1     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -140,31 +140,31 @@ Routing entry for 10.76.102.0/24
   * 10.76.0.3, via to_s1, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 proto ospf metric 20 
+10.76.102.0/24 nhid 20 proto ospf metric 20 
 	nexthop via 10.76.0.3 dev to_s1 weight 1 
 	nexthop via 10.76.0.11 dev to_s2 weight 1
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    1m11s              3.437s 10.76.0.19      to_s1:10.76.0.18                     0     0     0
-4.4.4.4           1 Full/DROther    1m06s              3.866s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
+3.3.3.3           1 Full/DROther    6m01s              3.582s 10.76.0.19      to_s1:10.76.0.18                     0     0     0
+4.4.4.4           1 Full/DROther    6m05s              3.264s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:01 ago
+  Last update 00:00:00 ago
   Flags: Selected 
   Status: Installed 
   * 10.76.0.19, via to_s1, weight 1
   * 10.76.0.27, via to_s2, weight 1
 $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
-10.76.101.0/24 nhid 18 proto ospf metric 20 
+10.76.101.0/24 nhid 19 proto ospf metric 20 
 	nexthop via 10.76.0.27 dev to_s2 weight 1 
 	nexthop via 10.76.0.19 dev to_s1 weight 1
 
 Trial 3: leaf1 to_s1 down
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-4.4.4.4           1 Full/DROther    1m13s              3.077s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+4.4.4.4           1 Full/DROther    6m07s              3.443s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -174,16 +174,16 @@ Routing entry for 10.76.102.0/24
     10.76.0.3, via to_s1 inactive, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 via 10.76.0.11 dev to_s2 proto ospf metric 20
+10.76.102.0/24 nhid 20 via 10.76.0.11 dev to_s2 proto ospf metric 20
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    1m13s              3.366s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
-4.4.4.4           1 Full/DROther    1m08s              3.791s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
+3.3.3.3           1 Full/DROther    6m03s              3.480s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
+4.4.4.4           1 Full/DROther    6m07s              3.162s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
-  Last update 00:00:01 ago
+  Last update 00:00:00 ago
   Flags: Selected 
   Status: Installed 
   * 10.76.0.27, via to_s2, weight 1
@@ -193,8 +193,8 @@ $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
 Trial 3: both paths restored
 $ docker compose exec -T leaf1 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-4.4.4.4           1 Full/DROther    1m26s              3.128s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
-3.3.3.3           1 Full/DROther    5.288s             3.713s 10.76.0.3       to_s1:10.76.0.2                      1     0     0
+4.4.4.4           1 Full/DROther    6m20s              3.418s 10.76.0.11      to_s2:10.76.0.10                     1     0     0
+3.3.3.3           1 Full/DROther    5.267s             3.732s 10.76.0.3       to_s1:10.76.0.2                      0     0     0
 $ docker compose exec -T leaf1 vtysh -c 'show ip route 10.76.102.0/24'
 Routing entry for 10.76.102.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -204,14 +204,14 @@ Routing entry for 10.76.102.0/24
   * 10.76.0.3, via to_s1, weight 1
   * 10.76.0.11, via to_s2, weight 1
 $ docker compose exec -T leaf1 ip route show exact 10.76.102.0/24
-10.76.102.0/24 nhid 21 proto ospf metric 20 
+10.76.102.0/24 nhid 20 proto ospf metric 20 
 	nexthop via 10.76.0.3 dev to_s1 weight 1 
 	nexthop via 10.76.0.11 dev to_s2 weight 1
 
 $ docker compose exec -T leaf2 vtysh -c 'show ip ospf neighbor'
 Neighbor ID     Pri State           Up Time         Dead Time Address         Interface                        RXmtL RqstL DBsmL
-3.3.3.3           1 Full/DROther    1m26s              3.407s 10.76.0.19      to_s1:10.76.0.18                     0     0     0
-4.4.4.4           1 Full/DROther    1m21s              3.822s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
+3.3.3.3           1 Full/DROther    6m16s              3.436s 10.76.0.19      to_s1:10.76.0.18                     1     0     0
+4.4.4.4           1 Full/DROther    6m21s              3.122s 10.76.0.27      to_s2:10.76.0.26                     0     0     0
 $ docker compose exec -T leaf2 vtysh -c 'show ip route 10.76.101.0/24'
 Routing entry for 10.76.101.0/24
   Known via "ospf", distance 110, metric 21, best
@@ -221,7 +221,7 @@ Routing entry for 10.76.101.0/24
   * 10.76.0.19, via to_s1, weight 1
   * 10.76.0.27, via to_s2, weight 1
 $ docker compose exec -T leaf2 ip route show exact 10.76.101.0/24
-10.76.101.0/24 nhid 18 proto ospf metric 20 
+10.76.101.0/24 nhid 19 proto ospf metric 20 
 	nexthop via 10.76.0.27 dev to_s2 weight 1 
 	nexthop via 10.76.0.19 dev to_s1 weight 1
 

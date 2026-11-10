@@ -1,0 +1,144 @@
+[
+  {
+    "phase": "baseline",
+    "observed_utc": "2026-11-10T12:54:37+00:00",
+    "disabled_uplink": "to_s1",
+    "disabled": false,
+    "leaf1_forward_uplink": "to_s1",
+    "captured_echo_requests": 6,
+    "links": {
+      "leaf1": {
+        "route": "10.76.102.0/24 nhid 20 proto ospf metric 20 \n\tnexthop via 10.76.0.3 dev to_s1 weight 1 \n\tnexthop via 10.76.0.11 dev to_s2 weight 1",
+        "neighbours": [
+          [
+            "3.3.3.3",
+            "Full/DROther",
+            "to_s1"
+          ],
+          [
+            "4.4.4.4",
+            "Full/DROther",
+            "to_s2"
+          ]
+        ]
+      },
+      "leaf2": {
+        "route": "10.76.101.0/24 nhid 19 proto ospf metric 20 \n\tnexthop via 10.76.0.27 dev to_s2 weight 1 \n\tnexthop via 10.76.0.19 dev to_s1 weight 1",
+        "neighbours": [
+          [
+            "3.3.3.3",
+            "Full/DROther",
+            "to_s1"
+          ],
+          [
+            "4.4.4.4",
+            "Full/DROther",
+            "to_s2"
+          ]
+        ]
+      }
+    },
+    "ping": "PING 10.76.102.10 (10.76.102.10) 56(84) bytes of data.\n[1794315271.555287] 64 bytes from 10.76.102.10: icmp_seq=1 ttl=61 time=0.357 ms\n[1794315271.763096] 64 bytes from 10.76.102.10: icmp_seq=2 ttl=61 time=0.129 ms\n[1794315271.971563] 64 bytes from 10.76.102.10: icmp_seq=3 ttl=61 time=0.171 ms\n[1794315272.178442] 64 bytes from 10.76.102.10: icmp_seq=4 ttl=61 time=0.200 ms\n[1794315272.386562] 64 bytes from 10.76.102.10: icmp_seq=5 ttl=61 time=0.086 ms\n[1794315272.594515] 64 bytes from 10.76.102.10: icmp_seq=6 ttl=61 time=0.098 ms\n\n--- 10.76.102.10 ping statistics ---\n6 packets transmitted, 6 received, 0% packet loss, time 1040ms\nrtt min/avg/max/mdev = 0.086/0.173/0.357/0.091 ms",
+    "packets": [
+      "10.76.101.10\t10.76.102.10\t8\t1",
+      "10.76.101.10\t10.76.102.10\t8\t2",
+      "10.76.101.10\t10.76.102.10\t8\t3",
+      "10.76.101.10\t10.76.102.10\t8\t4",
+      "10.76.101.10\t10.76.102.10\t8\t5",
+      "10.76.101.10\t10.76.102.10\t8\t6"
+    ]
+  },
+  {
+    "phase": "fault",
+    "observed_utc": "2026-11-10T12:55:47+00:00",
+    "disabled_uplink": "to_s1",
+    "disabled": true,
+    "leaf1_forward_uplink": "to_s2",
+    "captured_echo_requests": 6,
+    "links": {
+      "leaf1": {
+        "route": "10.76.102.0/24 nhid 20 via 10.76.0.11 dev to_s2 proto ospf metric 20",
+        "neighbours": [
+          [
+            "4.4.4.4",
+            "Full/DROther",
+            "to_s2"
+          ]
+        ]
+      },
+      "leaf2": {
+        "route": "10.76.101.0/24 nhid 14 via 10.76.0.27 dev to_s2 proto ospf metric 20",
+        "neighbours": [
+          [
+            "3.3.3.3",
+            "Full/DROther",
+            "to_s1"
+          ],
+          [
+            "4.4.4.4",
+            "Full/DROther",
+            "to_s2"
+          ]
+        ]
+      }
+    },
+    "ping": "PING 10.76.102.10 (10.76.102.10) 56(84) bytes of data.\n[1794315344.960936] 64 bytes from 10.76.102.10: icmp_seq=1 ttl=61 time=0.218 ms\n[1794315345.161982] 64 bytes from 10.76.102.10: icmp_seq=2 ttl=61 time=0.125 ms\n[1794315345.369851] 64 bytes from 10.76.102.10: icmp_seq=3 ttl=61 time=0.107 ms\n[1794315345.578033] 64 bytes from 10.76.102.10: icmp_seq=4 ttl=61 time=0.099 ms\n[1794315345.786077] 64 bytes from 10.76.102.10: icmp_seq=5 ttl=61 time=0.135 ms\n[1794315345.993950] 64 bytes from 10.76.102.10: icmp_seq=6 ttl=61 time=0.138 ms\n\n--- 10.76.102.10 ping statistics ---\n6 packets transmitted, 6 received, 0% packet loss, time 1033ms\nrtt min/avg/max/mdev = 0.099/0.137/0.218/0.038 ms",
+    "packets": [
+      "10.76.101.10\t10.76.102.10\t8\t1",
+      "10.76.101.10\t10.76.102.10\t8\t2",
+      "10.76.101.10\t10.76.102.10\t8\t3",
+      "10.76.101.10\t10.76.102.10\t8\t4",
+      "10.76.101.10\t10.76.102.10\t8\t5",
+      "10.76.101.10\t10.76.102.10\t8\t6"
+    ]
+  },
+  {
+    "phase": "restored",
+    "observed_utc": "2026-11-10T12:58:05+00:00",
+    "disabled_uplink": "to_s1",
+    "disabled": false,
+    "leaf1_forward_uplink": "to_s1",
+    "captured_echo_requests": 6,
+    "links": {
+      "leaf1": {
+        "route": "10.76.102.0/24 nhid 20 proto ospf metric 20 \n\tnexthop via 10.76.0.3 dev to_s1 weight 1 \n\tnexthop via 10.76.0.11 dev to_s2 weight 1",
+        "neighbours": [
+          [
+            "4.4.4.4",
+            "Full/DROther",
+            "to_s2"
+          ],
+          [
+            "3.3.3.3",
+            "Full/DROther",
+            "to_s1"
+          ]
+        ]
+      },
+      "leaf2": {
+        "route": "10.76.101.0/24 nhid 19 proto ospf metric 20 \n\tnexthop via 10.76.0.27 dev to_s2 weight 1 \n\tnexthop via 10.76.0.19 dev to_s1 weight 1",
+        "neighbours": [
+          [
+            "3.3.3.3",
+            "Full/DROther",
+            "to_s1"
+          ],
+          [
+            "4.4.4.4",
+            "Full/DROther",
+            "to_s2"
+          ]
+        ]
+      }
+    },
+    "ping": "PING 10.76.102.10 (10.76.102.10) 56(84) bytes of data.\n[1794315483.108766] 64 bytes from 10.76.102.10: icmp_seq=1 ttl=61 time=0.332 ms\n[1794315483.315717] 64 bytes from 10.76.102.10: icmp_seq=2 ttl=61 time=0.129 ms\n[1794315483.523578] 64 bytes from 10.76.102.10: icmp_seq=3 ttl=61 time=0.132 ms\n[1794315483.731575] 64 bytes from 10.76.102.10: icmp_seq=4 ttl=61 time=0.143 ms\n[1794315483.939718] 64 bytes from 10.76.102.10: icmp_seq=5 ttl=61 time=0.156 ms\n[1794315484.148301] 64 bytes from 10.76.102.10: icmp_seq=6 ttl=61 time=0.149 ms\n\n--- 10.76.102.10 ping statistics ---\n6 packets transmitted, 6 received, 0% packet loss, time 1040ms\nrtt min/avg/max/mdev = 0.129/0.173/0.332/0.071 ms",
+    "packets": [
+      "10.76.101.10\t10.76.102.10\t8\t1",
+      "10.76.101.10\t10.76.102.10\t8\t2",
+      "10.76.101.10\t10.76.102.10\t8\t3",
+      "10.76.101.10\t10.76.102.10\t8\t4",
+      "10.76.101.10\t10.76.102.10\t8\t5",
+      "10.76.101.10\t10.76.102.10\t8\t6"
+    ]
+  }
+]

@@ -12,7 +12,11 @@ from time import monotonic, sleep
 
 ROOT = Path(__file__).resolve().parent
 PREFIX = {"leaf1": "10.76.102.0/24", "leaf2": "10.76.101.0/24"}
-UPLINKS = {"to_s1", "to_s2"}
+GATEWAYS = {
+    "leaf1": {"to_s1": "10.76.0.3", "to_s2": "10.76.0.11"},
+    "leaf2": {"to_s1": "10.76.0.19", "to_s2": "10.76.0.27"},
+}
+UPLINKS = GATEWAYS["leaf1"].keys()
 SOURCE, DESTINATION = "10.76.101.10", "10.76.102.10"
 INTERVAL, PROBES = 0.2, 42
 REPLY = re.compile(r"^\[(\d+\.\d+)\].*bytes from .*icmp_seq=(\d+)")
@@ -40,13 +44,19 @@ def paths(leaf):
     }
 
 
-def wait_paths(expected, started, timeout=12):
+def wait_paths(devices, started, timeout=12):
+    expected = {
+        leaf: {(device, gateways[device]) for device in devices}
+        for leaf, gateways in GATEWAYS.items()
+    }
     observed = {}
     deadline = monotonic() + timeout
     while monotonic() < deadline:
-        for leaf, devices in expected.items():
-            if leaf not in observed and {dev for dev, _ in paths(leaf)} == devices:
-                observed[leaf] = round((monotonic() - started) * 1000, 1)
+        for leaf, hops in expected.items():
+            if paths(leaf) == hops:
+                observed.setdefault(leaf, round((monotonic() - started) * 1000, 1))
+            else:
+                observed.pop(leaf, None)
         if len(observed) == len(expected):
             return observed
         sleep(0.1)
@@ -107,7 +117,7 @@ def trial(number, failed, route_log, ping_log):
         fault_started = monotonic()
         run("leaf1", "ip", "link", "set", "dev", failed, "down")
         ack_ms = round((monotonic() - fault_started) * 1000, 1)
-        down = wait_paths({leaf: other for leaf in PREFIX}, fault_started)
+        down = wait_paths(other, fault_started)
         route_log.append(snapshot(f"Trial {number}: leaf1 {failed} down"))
         proc.wait(timeout=14)
         reader.join(timeout=3)
@@ -122,7 +132,7 @@ def trial(number, failed, route_log, ping_log):
         if fault_started is not None:
             restore_started = monotonic()
             run("leaf1", "ip", "link", "set", "dev", failed, "up")
-            restored = wait_paths({leaf: UPLINKS for leaf in PREFIX}, restore_started)
+            restored = wait_paths(UPLINKS, restore_started)
     route_log.append(snapshot(f"Trial {number}: both paths restored"))
     times = sorted(replies.values())
     return {
@@ -144,7 +154,7 @@ def main():
     parser.add_argument("--out", type=Path, default=default)
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=False)
-    wait_paths({leaf: UPLINKS for leaf in PREFIX}, monotonic(), timeout=45)
+    wait_paths(UPLINKS, monotonic(), timeout=45)
     failed = chosen_uplink()
     routes = [snapshot("Baseline: both paths available")]
     baseline = run("host1", "ping", "-n", "-D", "-i", str(INTERVAL), "-c", "10", DESTINATION)

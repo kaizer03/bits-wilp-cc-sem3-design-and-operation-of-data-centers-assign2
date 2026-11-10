@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-11-10T12:24:25.366237+00:00",
+  "recorded_at": "2026-11-10T12:59:18.162575+00:00",
   "docker": "29.9.2 (arm64)",
   "compose": "5.6.1",
   "frr": "FRRouting 10.5.5_git (leaf1) on Linux(7.0.14-linuxkit).",
@@ -17,15 +17,15 @@
       "sent": 42,
       "received": 42,
       "missing_sequences": [],
-      "longest_reply_gap_ms": 209.2,
-      "down_command_return_ms": 142.5,
+      "longest_reply_gap_ms": 209.1,
+      "down_command_return_ms": 114.6,
       "one_path_observed_ms": {
-        "leaf1": 240.9,
-        "leaf2": 333.4
+        "leaf1": 208.6,
+        "leaf2": 299.9
       },
       "two_paths_restored_ms": {
-        "leaf1": 218.5,
-        "leaf2": 6035.0
+        "leaf1": 196.1,
+        "leaf2": 5508.7
       }
     },
     {
@@ -34,15 +34,15 @@
       "sent": 42,
       "received": 42,
       "missing_sequences": [],
-      "longest_reply_gap_ms": 215.2,
-      "down_command_return_ms": 116.4,
+      "longest_reply_gap_ms": 210.8,
+      "down_command_return_ms": 116.7,
       "one_path_observed_ms": {
-        "leaf1": 207.6,
-        "leaf2": 315.7
+        "leaf1": 210.3,
+        "leaf2": 303.6
       },
       "two_paths_restored_ms": {
-        "leaf1": 196.3,
-        "leaf2": 5488.6
+        "leaf1": 201.6,
+        "leaf2": 5424.4
       }
     },
     {
@@ -51,15 +51,15 @@
       "sent": 42,
       "received": 42,
       "missing_sequences": [],
-      "longest_reply_gap_ms": 209.3,
-      "down_command_return_ms": 122.4,
+      "longest_reply_gap_ms": 209.1,
+      "down_command_return_ms": 129.5,
       "one_path_observed_ms": {
-        "leaf1": 216.9,
-        "leaf2": 309.7
+        "leaf1": 223.5,
+        "leaf2": 314.4
       },
       "two_paths_restored_ms": {
-        "leaf1": 220.3,
-        "leaf2": 5752.3
+        "leaf1": 188.8,
+        "leaf2": 5837.3
       }
     }
   ]
