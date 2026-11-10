@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OSPF Fabric Lab</title>
+<link rel="stylesheet" href="/fabric.css">
+<script src="/fabric.js" defer></script>
+</head>
+<body>
+<header><div class="masthead"><span class="brand">OSPF Fabric Lab</span><span class="course">CCZG508 / Assignment 2</span></div></header>
+<main>
+  <div class="title"><div><h1>Leaf–spine topology</h1><p>One ICMP flow across two equal-cost OSPF paths</p></div><span id="source" class="source">Recorded capture</span></div>
+  <nav aria-label="Lab state">
+    <button data-phase="baseline">Baseline</button>
+    <button data-phase="fault">Uplink down</button>
+    <button data-phase="restored">Restored</button>
+    <button data-phase="live">Live lab</button>
+  </nav>
+  <div class="workspace">
+    <section class="fabric" aria-label="Network diagram">
+      <div class="toolbar"><div class="legend"><span><i class="legend-active"></i>Selected path</span><span><i></i>Available</span><span><i class="legend-down"></i>Link down</span></div><span>OSPF area 0</span></div>
+      <svg id="fabric" viewBox="0 0 760 460" role="img" aria-label="Two spine routers, two leaf switches and two hosts">
+        <defs>
+          <g id="router">
+            <path d="M-29-7v17c0 8 13 14 29 14s29-6 29-14V-7" class="device-body"/>
+            <ellipse cy="-7" rx="29" ry="15" class="device-face"/>
+            <path class="device-mark" d="M-16-7h32m-32 0 5-3m-5 3 5 3m27-3-5-3m5 3-5 3M0-17v20m0-20-3 4m3-4 3 4M0 3l-3-4m3 4 3-4"/>
+          </g>
+          <g id="switch">
+            <rect x="-31" y="-14" width="62" height="28" rx="5" class="device-body"/>
+            <path class="device-mark" d="M-24-5h7m5 0h7m5 0h7m5 0h7M-24 4h7m5 0h7m5 0h7m5 0h7"/>
+            <circle cx="24" cy="4" r="2.4" fill="#7ad4b6"/>
+          </g>
+          <g id="host">
+            <rect x="-21" y="-16" width="42" height="28" rx="3" class="host-screen"/>
+            <path d="M-11 19h22m-11-7v7" class="host-stand"/>
+            <path d="M-13-7h14m-14 5h22" class="host-prompt"/>
+          </g>
+        </defs>
+        <text x="22" y="69" class="tier">SPINE</text>
+        <text x="22" y="233" class="tier">LEAF</text>
+        <text x="22" y="390" class="tier">HOST</text>
+        <g class="links">
+          <path id="l1-to_s1" d="M238 224 L238 79"/>
+          <path id="l2-to_s2" d="M522 224 L522 79"/>
+          <path id="l1-to_s2" d="M238 224 L522 79"/>
+          <path id="l2-to_s1" d="M522 224 L238 79"/>
+          <path id="access1" d="M238 380 L238 224"/>
+          <path id="access2" d="M522 380 L522 224"/>
+        </g>
+        <g class="node" transform="translate(238 79)">
+          <use href="#router"/><text x="-46" y="-2" text-anchor="end">Spine 1</text><text class="node-meta" x="-46" y="17" text-anchor="end">3.3.3.3</text>
+        </g>
+        <g class="node" transform="translate(522 79)">
+          <use href="#router"/><text x="46" y="-2">Spine 2</text><text class="node-meta" x="46" y="17">4.4.4.4</text>
+        </g>
+        <g class="node" transform="translate(238 224)">
+          <use href="#switch"/><text x="-46" y="-2" text-anchor="end">Leaf 1</text><text class="node-meta" x="-46" y="17" text-anchor="end">1.1.1.1</text>
+        </g>
+        <g class="node" transform="translate(522 224)">
+          <use href="#switch"/><text x="46" y="-2">Leaf 2</text><text class="node-meta" x="46" y="17">2.2.2.2</text>
+        </g>
+        <g class="node" transform="translate(238 380)">
+          <use href="#host"/><text y="43" text-anchor="middle">Host 1</text><text class="node-meta" y="62" text-anchor="middle">10.76.101.10</text>
+        </g>
+        <g class="node" transform="translate(522 380)">
+          <use href="#host"/><text y="43" text-anchor="middle">Host 2</text><text class="node-meta" y="62" text-anchor="middle">10.76.102.10</text>
+        </g>
+        <g id="fault-marker" visibility="hidden" transform="translate(238 149)">
+          <circle r="11"/><path d="M-3-3l6 6m0-6-6 6"/><text x="-19" y="4" text-anchor="end">DOWN</text>
+        </g>
+        <g id="packet" visibility="hidden">
+          <circle r="12"/><text text-anchor="middle" y="4" id="packet-label"></text>
+        </g>
+      </svg>
+      <div class="controls">
+        <button id="play" class="primary">Play capture</button>
+        <button id="step">Next packet</button>
+        <span id="packet-count" aria-live="polite"></span>
+      </div>
+    </section>
+    <aside aria-label="Routing and packet evidence">
+      <h2 id="stage"></h2><p id="explanation"></p>
+      <div id="routes"></div>
+      <div class="capture"><h3>ICMP capture</h3><p id="capture"></p><p id="summary"></p></div>
+    </aside>
+  </div>
+  <p class="footnote">Packet markers move at replay speed. The Leaf 1 egress is observed in the capture. The rest of the path is drawn from the topology.</p>
+</main>
+</body>
+</html>
